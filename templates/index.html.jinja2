@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Common style files -->
+    <link rel="stylesheet" href="/style/common.css" type="text/css" />
+
+    <!--Recovery-specific style -->
+    {% if recovery == "OrangeFox" %}
+    <link rel="stylesheet" href="/style/orangefox.css" type="text/css" />
+    {% else %}
+    <link rel="stylesheet" href="/style/twrp.css" type="text/css" />
+    {% endif %}
+    <title>
+        {{ recovery }} releases for {{ marketname }} ({{ device }}) 
+    </title>
+    <!--Download buttons-->
+    <script src="/scripts/download.js" defer></script>
+</head>
+<body>
+    <h1>
+        {{ recovery }} releases for {{ marketname }} ({{ device }}) (by {{ maintainer }})
+    </h1>
+    
+    <h2>
+        Version {{ version }}
+    </h2>
+
+    <div class="changelog">
+        <h2>Changelog</h2>
+        {{ changelogHtml }}
+    </div>
+
+    <div class="install-instructions">
+        <h2>Install instructions</h2>
+        {{ installInstructionsHtml }}
+    </div>
+
+    <button>
+        <a href="install-{{ device }}.zip">
+            Download ZIP installer
+        </a>
+    </button>
+    <button>
+        <a href="boot-{{ device }}.img">
+            Download .img file
+        </a>
+    </button>
+    {% if include_vbmeta %}
+    <button>
+        <a href="vbmeta.img">
+            Download blank Vbmeta
+        </a>
+    </button>
+    {% endif %}
+</body>
+</html>
