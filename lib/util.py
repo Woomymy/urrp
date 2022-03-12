@@ -1,13 +1,14 @@
-from hashlib import sha256
-from os.path import exists
-from os import mkdir
-from subprocess import run
-from shutil import rmtree
-from lib.templates import get_template
-
 """
 Various utilities
 """
+
+from hashlib import sha256
+from os.path import exists
+from os import mkdir
+from sys import exit as sexit
+from subprocess import run
+from shutil import rmtree
+from lib.templates import get_template
 
 
 def check_files(files: list[str]):
@@ -17,7 +18,7 @@ def check_files(files: list[str]):
     for file in files:
         if not exists(file[1]):
             print(f"{file[0]} not found")
-            exit(1)
+            sexit(1)
 
 
 def clean_mkdir(path: str):
@@ -31,12 +32,12 @@ def clean_mkdir(path: str):
     mkdir(path)
 
 
-def mdToHtml(templateParams: dict[str, str], file: str) -> str:
+def md_to_html(template_params: dict[str, str], file: str) -> str:
     """
     Run jinja on a template, and convert it to HTML using pandoc
     """
 
-    templateJinja = get_template(file).render(templateParams)
+    template_jinja = get_template(file).render(template_params)
 
     # pass string directly in stdin
     return run([
@@ -45,7 +46,7 @@ def mdToHtml(templateParams: dict[str, str], file: str) -> str:
         "markdown",
         "-t",
         "html",
-    ], capture_output=True, input=templateJinja.encode()).stdout.decode("UTF-8")
+    ], check=True, capture_output=True, input=template_jinja.encode()).stdout.decode("UTF-8")
 
 
 def write_sha256(filepath: str):
@@ -53,13 +54,13 @@ def write_sha256(filepath: str):
     Write files sha256 sum in {file}.sha256sum
     """
     out = f"{filepath}.sha256sum"
-    hash = sha256()
+    file_hash = sha256()
 
-    with open(filepath, "rb") as inputFile:
-        for bytes in iter(lambda: inputFile.read(4096), b""):
-            hash.update(bytes)
+    with open(filepath, "rb") as input_file:
+        for fbytes in iter(lambda: input_file.read(4096), b""):
+            file_hash.update(fbytes)
 
-    print(f"--- {filepath}.sha256: {hash.hexdigest()}")
+    print(f"--- {filepath}.sha256: {file_hash.hexdigest()}")
 
-    with open(out, "w") as outFile:
-        outFile.write(f"{hash.hexdigest()}\n")
+    with open(out, "w", encoding="UTF-8") as out_file:
+        out_file.write(f"{file_hash.hexdigest()}\n")
