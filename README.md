@@ -47,3 +47,7 @@ Changelog and installation instruction markdown files can also use jinja2 templa
 ### Credits
 
 Font used in page is [Iosevka](https://github.com/be5invis/Iosevka) is licensed under the SIL Open Font License 1.1. See [LICENSE_IOSEVKA file](./LICENSE_IOSEVKA) for more informations
+
+### License
+
+This project is licensed under the [MIT LICENSE, see LICENSE file for more details](./LICENSE)
