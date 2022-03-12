@@ -6,8 +6,9 @@ from jinja2 import Environment, FileSystemLoader
 from os import mkdir
 from os.path import exists
 from shutil import copyfile, rmtree
+from lib.config import load_config
 
-def check_files(files):
+def check_files(files: list[str]):
     """
     Check if all required files exist
     """
@@ -17,68 +18,55 @@ def check_files(files):
             exit(1)
 
 def main():
-    cli = ArgumentParser(description="Generate site template")
-    cli.add_argument('--device', type=str, help="Device codename", required=True)
-    cli.add_argument('--prettyname', type=str, help="Device market/pretty name", required=True)
-    cli.add_argument('--boot', type=str, help="Boot/recovery image", required=True)
-    cli.add_argument('--zip', type=str, help="ZIP installer", required=False, default="")
-    cli.add_argument('--remove-vbmeta', type=bool, help="Don't include vbmeta image", default=False)
-    cli.add_argument('--out-dir', type=str, help="Output directory", required=False, default="out")
-    cli.add_argument('--release', type=str, help="Release version", required=True)
-    cli.add_argument('--is-orangefox', type=bool, help="OrangeFox build", required=False, default=False)
-    cli.add_argument('--maintainer', type=str, help="Maintainer name", required=True)
-    cli.add_argument('--changelog', type=str, help="Changelog file", required=True)
-    cli.add_argument('--install-instructions', type=str, help="Installation instructions", required=True)
+    config = load_config()
+    recovery = "OrangeFox" if config.is_orangefox else "TWRP"
 
-    args = cli.parse_args()
-    recovery = "OrangeFox" if args.is_orangefox else "TWRP"
-
-    print(f"Generating {recovery} releases notes for {args.prettyname} ({args.device})")
+    print(f"Generating {recovery} releases notes for {config.prettyname} ({config.device})")
     # Check if all files exist
     check_files(
         [
-            ("Boot image", args.boot),
-            ("ZIP Installer", args.zip),
-            ("Changelog file", args.changelog),
-            ("Installation instructions", args.install_instructions)
+            ("Boot image", config.boot),
+            ("ZIP Installer", config.zip),
+            ("Changelog file", config.changelog_path),
+            ("Installation instructions", config.install_instructions_path)
         ]
     )
 
-    htmlChangeLog = run(["pandoc", "-f", "markdown", "-t", "html", args.changelog], capture_output=True)
-    htmlInstallInstructions = run(["pandoc", "-f", "markdown", "-t", "html", args.install_instructions], capture_output=True)
-    if exists(args.out_dir):
-        rmtree(args.out_dir)
+    htmlChangeLog = run(["pandoc", "-f", "markdown", "-t", "html", config.changelog_path], capture_output=True)
+    htmlInstallInstructions = run(["pandoc", "-f", "markdown", "-t", "html", config.install_instructions_path], capture_output=True)
+    if exists(config.out_dir):
+        rmtree(config.out_dir)
 
     # Create out dir
-    mkdir(args.out_dir)
+    mkdir(config.out_dir)
     
-    copyfile(args.zip, f"{args.out_dir}/install-{args.device}.zip")
-    copyfile(args.boot, f"{args.out_dir}/boot-{args.device}.img")
+    copyfile(config.zip, f"{config.out_dir}/install-{config.device}.zip")
+    copyfile(config.boot, f"{config.out_dir}/boot-{config.device}.img")
 
     jinja_env = Environment(loader=FileSystemLoader("templates"))
 
     template = jinja_env.get_template("index.html.jinja2")
     index = template.render(
         recovery=recovery,
-        marketname=args.prettyname,
-        device=args.device,
-        maintainer=args.maintainer,
-        version=args.release,
+        marketname=config.prettyname,
+        device=config.device,
+        maintainer=config.maintainer,
+        version=config.release,
         changelogHtml=htmlChangeLog.stdout.decode("UTF-8"),
         installInstructionsHtml=htmlInstallInstructions.stdout.decode("UTF-8"),
-        include_vbmeta=not args.remove_vbmeta
+        include_vbmeta=not config.remove_vbmeta
     )
 
-    with open(f"{args.out_dir}/index.html", 'w') as indexfile:
+    with open(f"{config.out_dir}/index.html", 'w') as indexfile:
         indexfile.write(index)
     
     print("-- Copying style files")
-    copy_tree("style", f"{args.out_dir}/style")
+    copy_tree("style", f"{config.out_dir}/style")
     print("-- Copying script files")
-    copy_tree("scripts", f"{args.out_dir}/scripts")
+    copy_tree("scripts", f"{config.out_dir}/scripts")
 
-    if not args.remove_vbmeta:
-        copyfile("vbmeta.img", f"{args.out_dir}/vbmeta.img")
+    if not config.remove_vbmeta:
+        copyfile("vbmeta.img", f"{config.out_dir}/vbmeta.img")
 
 if __name__ == "__main__":
     main()

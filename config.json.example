@@ -1,0 +1,12 @@
+{
+  "device": "rosemary",
+  "prettyname": "Redmi Note 10S",
+  "boot": "~/TWRP/boot-rosemary.img",
+  "zip": "~/TWRP/installer-rosemary.zip",
+  "remove_vbmeta": false,
+  "release": "3.6.1-11_1",
+  "is_orangefox": true,
+  "maintainer": "Woomymy",
+  "changelog": "changelog.md",
+  "install_instructions": "install.md"
+}
