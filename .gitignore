@@ -1,1 +1,5 @@
 out
+config.json
+__pycache__
+changelog.md
+install.md

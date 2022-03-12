@@ -1,4 +1,7 @@
-# Web page configuration
+"""
+Utilities for loading configuration
+"""
+
 from argparse import ArgumentParser
 from os import environ
 from os.path import exists
@@ -52,6 +55,9 @@ def fix_home_path(path: str) -> str:
     return path.replace("~", environ.get("HOME"))
 
 def load_config() -> PageConfig:
+    """
+    Find config .json file and return PageConfig from it
+    """
     cli = ArgumentParser(
         description="recovery_rel_page cli",
         prog="recovery_rel_page"
@@ -61,6 +67,7 @@ def load_config() -> PageConfig:
 
     args = cli.parse_args()
     configJson = "{}"
+    
     # Check if config.json exists and load it
     if args.config != "":
         if exists(args.config):
