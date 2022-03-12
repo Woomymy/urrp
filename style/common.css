@@ -1,6 +1,7 @@
 /*
 See /LICENSE_IOSEVKA
 */
+
 @font-face {
   font-family: "Iosevka Term Web";
   font-display: swap;
@@ -22,4 +23,11 @@ button {
   border-radius: 10px;
   padding: 0.8em;
   margin-bottom: 5px;
+}
+
+/* These variables are set in recovery-specific styles */
+button,
+button a {
+  color: var(--button-fg-color, black);
+  background-color: var(--button-bg-color, lightskyblue);
 }

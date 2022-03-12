@@ -1,5 +1,4 @@
-button,
-button a {
-  color: #333;
-  background-color: lightskyblue;
+:root {
+  --button-bg-color: lightskyblue;
+  --button-fg-color: #333;
 }
