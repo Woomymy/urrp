@@ -3,6 +3,7 @@
 Generate static site for TWRP/OrangeFox official releases
 """
 
+from json import dumps as jsondumps
 from shutil import copyfile, copytree
 from lib.config import load_config
 from lib.templates import get_template
@@ -31,14 +32,17 @@ def main():
 
     clean_mkdir(config.out_dir)
 
-    zip_out = f"{config.out_dir}/"
-    boot_out = f"{config.out_dir}/"
+    zip_name = ""
+    boot_name = ""
     if config.is_orangefox:
-        zip_out += f"OrangeFox-{config.release}-{config.device}.zip"
-        boot_out += f"OrangeFox-{config.release}-{config.device}.img"
+        zip_name = f"OrangeFox-{config.release}-{config.device}.zip"
+        boot_name = f"OrangeFox-{config.release}-{config.device}.img"
     else:
-        zip_out += f"twrp-install-{config.release}-{config.device}.zip"
-        boot_out += f"twrp-{config.release}-{config.device}.img"
+        zip_name = f"twrp-install-{config.release}-{config.device}.zip"
+        boot_name = f"twrp-{config.release}-{config.device}.img"
+
+    zip_out = f"{config.out_dir}/{zip_name}"
+    boot_out = f"{config.out_dir}/{boot_name}"
 
     template_params = {
         "recovery": recovery,
@@ -47,8 +51,8 @@ def main():
         "maintainer": config.maintainer,
         "version": config.release,
         "include_vbmeta": not config.remove_vbmeta,
-        "zip_out": zip_out.removeprefix(f"{config.out_dir}/"),
-        "img_out": boot_out.removeprefix(f"{config.out_dir}/")
+        "zip_out": zip_name,
+        "img_out": boot_name
     }
 
     # We can't directly add them to templateParams
@@ -79,6 +83,18 @@ def main():
         vbmeta_out = f"{config.out_dir}/vbmeta.img"
         copyfile("vbmeta.img", vbmeta_out)
         write_sha256(vbmeta_out)
+
+    # A file containing release information
+    with open(f"{config.out_dir}/release.json", 'w', encoding="UTF-8") as release_info:
+        print("-- Writing informations in release.json")
+        release_info.write(jsondumps({
+            "device": config.device,
+            "is_orangefox": config.is_orangefox,
+            "includes_blank_vbmeta": not config.remove_vbmeta,
+            "version": config.release,
+            "zip": zip_name,
+            "img": boot_name
+        }))
 
 
 if __name__ == "__main__":
