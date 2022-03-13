@@ -41,8 +41,11 @@ Changelog and installation instruction markdown files can also use jinja2 templa
 - marketname: Device name
 - device: Device codename
 - maintainer: Maintainer name
-- Version: Release version
+- version: Release version
 - Include_vbmeta: true if blank vbmeta is included
+- zip_name: Output zip name
+- img_name: Output img name
+- gpg_signed: True if files are signed with gpg
 
 ### Credits
 

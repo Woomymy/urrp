@@ -51,8 +51,9 @@ def main():
         "maintainer": config.maintainer,
         "version": config.release,
         "include_vbmeta": not config.remove_vbmeta,
-        "zip_out": zip_name,
-        "img_out": boot_name
+        "zip_name": zip_name,
+        "img_name": boot_name,
+        "gpg_signed": config.gpg_sign
     }
 
     # We can't directly add them to templateParams
@@ -101,7 +102,9 @@ def main():
             "img": boot_name,
             "gpg_signed": config.gpg_sign
         }))
-    gpg_sign([f"{config.out_dir}/release.json"], config.gpg_cli_opts)
+
+    if config.gpg_sign:
+        gpg_sign([f"{config.out_dir}/release.json"], config.gpg_cli_opts)
 
 
 if __name__ == "__main__":
