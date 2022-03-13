@@ -43,6 +43,11 @@
         <a href="{{ zip_name }}.sha256sum">
             (SHA256SUM)
         </a>
+        {% if gpg_signed %}
+        <a href="{{ zip_name }}.sha256sum.sig">
+            (GPG)
+        </a>
+        {% endif %}
     </button>
     <button>
         <a href="{{ img_name }}">
@@ -51,6 +56,11 @@
         <a href="{{ img_name }}.sha256sum">
             (SHA256SUM)
         </a>
+        {% if gpg_signed %}
+        <a href="{{ img_name }}.sha256sum.sig">
+            (GPG)
+        </a>
+        {% endif %}
     </button>
     {% if include_vbmeta %}
     <button>
@@ -59,6 +69,12 @@
         </a>
         <a href="vbmeta.img.sha256sum">
             (SHA256SUM)
+        </a>
+        {% if gpg_signed %}
+        <a href="vbmeta.img.sha256sum.sig">
+            (GPG)
+        </a>
+        {% endif %}
     </button>
     {% endif %}
 </body>
