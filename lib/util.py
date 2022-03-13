@@ -64,3 +64,19 @@ def write_sha256(filepath: str):
 
     with open(out, "w", encoding="UTF-8") as out_file:
         out_file.write(f"{file_hash.hexdigest()}\n")
+
+
+def gpg_sign(files: list[str], opts: str):
+    """
+    Sign a list of files with gpg (use "opts" to add more CLI arguments)
+    """
+    cmd = "gpg"
+    if opts != "":
+        # Add a space just in case
+        cmd += f" {opts}"
+
+    cmd += " --detach-sig {file}"
+
+    for file in files:
+        print(f"--- Signing {file}")
+        run(cmd.format(file=file).split(' '), check=True)

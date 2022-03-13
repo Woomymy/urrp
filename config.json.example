@@ -8,5 +8,7 @@
   "is_orangefox": true,
   "maintainer": "Woomymy",
   "changelog": "changelog.md",
-  "install_instructions": "install.md"
+  "install_instructions": "install.md",
+  "gpg_sign": true,
+  "gpg_cli_opts": ""
 }

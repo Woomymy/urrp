@@ -7,7 +7,7 @@ from json import dumps as jsondumps
 from shutil import copyfile, copytree
 from lib.config import load_config
 from lib.templates import get_template
-from lib.util import check_files, clean_mkdir, md_to_html, write_sha256
+from lib.util import check_files, clean_mkdir, gpg_sign, md_to_html, write_sha256
 
 
 def main():
@@ -84,6 +84,11 @@ def main():
         copyfile("vbmeta.img", vbmeta_out)
         write_sha256(vbmeta_out)
 
+    if config.gpg_sign:
+        print("-- Signing files...")
+        gpg_sign([f"{vbmeta_out}.sha256sum", f"{zip_out}.sha256sum",
+                 f"{boot_out}.sha256sum"], config.gpg_cli_opts)
+
     # A file containing release information
     with open(f"{config.out_dir}/release.json", 'w', encoding="UTF-8") as release_info:
         print("-- Writing informations in release.json")
@@ -93,8 +98,10 @@ def main():
             "includes_blank_vbmeta": not config.remove_vbmeta,
             "version": config.release,
             "zip": zip_name,
-            "img": boot_name
+            "img": boot_name,
+            "gpg_signed": config.gpg_sign
         }))
+    gpg_sign([f"{config.out_dir}/release.json"], config.gpg_cli_opts)
 
 
 if __name__ == "__main__":

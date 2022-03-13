@@ -24,6 +24,8 @@ class PageConfig:
     maintainer: str = "Unknown"
     changelog_path: str
     install_instructions_path: str
+    gpg_sign: bool
+    gpg_cli_opts: str
 
     def __init__(self,
                  device: str,
@@ -36,7 +38,9 @@ class PageConfig:
                  is_orangefox: bool = False,
                  maintainer: str = "Unknown",
                  changelog_path: str = "",
-                 install_instructions_path: str = ""):
+                 install_instructions_path: str = "",
+                 gpg_sign: bool = False,
+                 gpg_cli_opts: str = ""):
         self.device = device
         self.prettyname = prettyname
         self.boot = boot
@@ -48,6 +52,8 @@ class PageConfig:
         self.maintainer = maintainer
         self.changelog_path = changelog_path
         self.install_instructions_path = install_instructions_path
+        self.gpg_sign = gpg_sign
+        self.gpg_cli_opts = gpg_cli_opts
 
 
 def fix_home_path(path: str) -> str:
@@ -93,5 +99,8 @@ def load_config() -> PageConfig:
         # Replace ~ with /home/USER
         changelog_path=fix_home_path(config_obj["changelog"]),
         install_instructions_path=fix_home_path(
-            config_obj["install_instructions"])
+            config_obj["install_instructions"],
+        ),
+        gpg_sign=config_obj["gpg_sign"] if "gpg_sign" in config_obj else False,
+        gpg_cli_opts=config_obj["gpg_cli_opts"] if "gpg_cli_opts" in config_obj else ""
     )
