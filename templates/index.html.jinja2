@@ -37,18 +37,18 @@
     </div>
 
     <button>
-        <a href="install-{{ device }}.zip">
+        <a href="{{ zip_out }}">
             Download ZIP installer
         </a>
-        <a href="install-{{ device }}.zip.sha256sum">
+        <a href="{{ zip_out }}.sha256sum">
             (SHA256SUM)
         </a>
     </button>
     <button>
-        <a href="boot-{{ device }}.img">
+        <a href="{{ img_out }}">
             Download .img file
         </a>
-        <a href="boot-{{ device }}.img.sha256sum">
+        <a href="{{ img_out }}.sha256sum">
             (SHA256SUM)
         </a>
     </button>

@@ -17,7 +17,7 @@ def main():
     recovery = "OrangeFox" if config.is_orangefox else "TWRP"
 
     print(
-        f"Generating {recovery} releases notes for {config.prettyname} ({config.device})")
+        f"- Generating {recovery} releases notes for {config.prettyname} ({config.device})")
 
     # Check if all files exist
     check_files(
@@ -30,13 +30,25 @@ def main():
     )
 
     clean_mkdir(config.out_dir)
+
+    zip_out = f"{config.out_dir}/"
+    boot_out = f"{config.out_dir}/"
+    if config.is_orangefox:
+        zip_out += f"OrangeFox-{config.release}-{config.device}.zip"
+        boot_out += f"OrangeFox-{config.release}-{config.device}.img"
+    else:
+        zip_out += f"twrp-install-{config.release}-{config.device}.zip"
+        boot_out += f"twrp-{config.release}-{config.device}.img"
+
     template_params = {
         "recovery": recovery,
         "marketname": config.prettyname,
         "device": config.device,
         "maintainer": config.maintainer,
         "version": config.release,
-        "include_vbmeta": not config.remove_vbmeta
+        "include_vbmeta": not config.remove_vbmeta,
+        "zip_out": zip_out.removeprefix(f"{config.out_dir}/"),
+        "img_out": boot_out.removeprefix(f"{config.out_dir}/")
     }
 
     # We can't directly add them to templateParams
@@ -53,9 +65,6 @@ def main():
         indexfile.write(index)
 
     copytree("style", f"{config.out_dir}/style")
-
-    zip_out = f"{config.out_dir}/install-{config.device}.zip"
-    boot_out = f"{config.out_dir}/boot-{config.device}.img"
 
     print("-- Copying installer and boot image")
     copyfile(config.zip, zip_out)
