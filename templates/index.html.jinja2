@@ -12,7 +12,10 @@
     {% else %}
     <link rel="stylesheet" href="style/twrp.css" type="text/css" />
     {% endif %}
-
+    
+    {% if addionnal_js != "" %}
+    <script src="custom.js" defer></script>
+    {% endif %}
     <title>
         {{ recovery }} releases for {{ marketname }} ({{ device }}) 
     </title>

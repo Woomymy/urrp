@@ -10,5 +10,6 @@
   "changelog": "changelog.md",
   "install_instructions": "install.md",
   "gpg_sign": true,
-  "gpg_cli_opts": ""
+  "gpg_cli_opts": "",
+  "additionnal_js": ""
 }

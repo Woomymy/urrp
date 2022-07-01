@@ -53,7 +53,8 @@ def main():
         "include_vbmeta": not config.remove_vbmeta,
         "zip_name": zip_name,
         "img_name": boot_name,
-        "gpg_signed": config.gpg_sign
+        "gpg_signed": config.gpg_sign,
+        "additionnal_js": config.additionnal_js
     }
 
     # We can't directly add them to templateParams
@@ -74,6 +75,13 @@ def main():
     print("-- Copying installer and boot image")
     copyfile(config.zip, zip_out)
     copyfile(config.boot, boot_out)
+    
+    if config.additionnal_js != "":
+        check_files([
+            ("Additionnal Javascript", config.additionnal_js)
+        ])
+        print("-- Copying additionnal javascript")
+        copyfile(config.additionnal_js, f"{config.out_dir}/custom.js")
 
     print("-- Generating SHA256 files")
     write_sha256(zip_out)

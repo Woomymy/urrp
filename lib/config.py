@@ -26,6 +26,7 @@ class PageConfig:
     install_instructions_path: str
     gpg_sign: bool
     gpg_cli_opts: str
+    additionnal_js: str
 
     def __init__(self,
                  device: str,
@@ -40,8 +41,9 @@ class PageConfig:
                  changelog_path: str = "",
                  install_instructions_path: str = "",
                  gpg_sign: bool = False,
-                 gpg_cli_opts: str = ""):
-        self.device = device
+                 gpg_cli_opts: str = "",
+                 additionnal_js: str = ""):
+        self.device =device
         self.prettyname = prettyname
         self.boot = boot
         self.zip = zip_installer
@@ -54,6 +56,7 @@ class PageConfig:
         self.install_instructions_path = install_instructions_path
         self.gpg_sign = gpg_sign
         self.gpg_cli_opts = gpg_cli_opts
+        self.additionnal_js = additionnal_js
 
 
 def fix_home_path(path: str) -> str:
@@ -102,5 +105,6 @@ def load_config() -> PageConfig:
             config_obj["install_instructions"],
         ),
         gpg_sign=config_obj["gpg_sign"] if "gpg_sign" in config_obj else False,
-        gpg_cli_opts=config_obj["gpg_cli_opts"] if "gpg_cli_opts" in config_obj else ""
+        gpg_cli_opts=config_obj["gpg_cli_opts"] if "gpg_cli_opts" in config_obj else "",
+        additionnal_js=config_obj["additionnal_js"] if "additionnal_js" in config_obj else ""
     )
