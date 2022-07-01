@@ -40,41 +40,41 @@
     </div>
 
     <button>
-        <a href="{{ zip_name }}">
+        <a id="zip-dl" href="{{ zip_name }}">
             Download ZIP installer
         </a>
-        <a href="{{ zip_name }}.sha256sum">
+        <a id="zip-checksum" href="{{ zip_name }}.sha256sum">
             (SHA256SUM)
         </a>
         {% if gpg_signed %}
-        <a href="{{ zip_name }}.sha256sum.sig">
+        <a id="zip-gpg" href="{{ zip_name }}.sha256sum.sig">
             (GPG)
         </a>
         {% endif %}
     </button>
     <button>
-        <a href="{{ img_name }}">
+        <a id="img-dl" href="{{ img_name }}">
             Download .img file
         </a>
-        <a href="{{ img_name }}.sha256sum">
+        <a id="img-checksum" href="{{ img_name }}.sha256sum">
             (SHA256SUM)
         </a>
         {% if gpg_signed %}
-        <a href="{{ img_name }}.sha256sum.sig">
+        <a id="img-gpg" href="{{ img_name }}.sha256sum.sig">
             (GPG)
         </a>
         {% endif %}
     </button>
     {% if include_vbmeta %}
     <button>
-        <a href="vbmeta.img">
+        <a id="vbmeta-dl" href="vbmeta.img">
             Download blank Vbmeta
         </a>
-        <a href="vbmeta.img.sha256sum">
+        <a id="vbmeta-checksum" href="vbmeta.img.sha256sum">
             (SHA256SUM)
         </a>
         {% if gpg_signed %}
-        <a href="vbmeta.img.sha256sum.sig">
+        <a id="vbmeta-gpg" href="vbmeta.img.sha256sum.sig">
             (GPG)
         </a>
         {% endif %}
